@@ -34,4 +34,31 @@ data <- data[,c(1,39,2,3,4,5,44,6,45,40,41,42,43,8,9,10,11,12,13,14,15,16,17,18,
 str(data)
 #data = General descriotion ok
 #------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Module 2: Physical condition - Infraestructure status
+#Fissures
+columns <- c(55:63,66:74)
+fis <- INM[,columns]
+fis[fis == 999] <- NA 
+summary(fis) #OJO QUE HAY VARIABLES CON 99 = SOSPECHOSO
+
+#Total educational spaces
+T_aula <- fis$P42
+T_taller <- fis$P43
+T_acomp <- fis$P44
+T_medios <- fis$P45
+T_lab <- fis$P46
+T_encicl <- fis$P47
+T_ofdir <- fis$P48
+T_ofadm <- fis$P49
+T_dorm <- fis$P50
+Tot <- T_aula + T_taller + T_acomp + T_medios + T_lab + T_encicl + T_ofdir + T_ofadm + T_dorm
+
+#Total fissured educational spaces
+Totals <- fis[,c(1:9)]
+Fissures <- fis[,c(10:18)]
+todos_recintos <- sum(fis[,c(1:9)], na.rm=T) #duda si al omitir, corre el espacio
+
+#Consider div/0
+porc_fiss <- Fissures/Totals
 
