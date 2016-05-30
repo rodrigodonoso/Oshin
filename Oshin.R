@@ -148,6 +148,7 @@ todos_elect_porc <- todos_fissures/todos_recintos #One column with total damage 
 #Module 3: Physical condition - Basic services spaces: fissures, leaks, glass, door, electricity.
 
 #TEST1
+#TEST2
 
 
 
