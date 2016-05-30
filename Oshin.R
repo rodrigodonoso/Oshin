@@ -35,30 +35,117 @@ str(data)
 #data = General descriotion ok
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
-#Module 2: Physical condition - Infraestructure status
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Module 2: Physical condition - Educational spaces: fissures, leaks, glass, door, electricity.
 #Fissures
 columns <- c(55:63,66:74)
-fis <- INM[,columns]
+fis <- INM[,columns]  
+#Step1: 999 a NA
+table(fis==999) 
+fis[fis == 999] <- NA 
+summary(fis) #OJO QUE HAY VARIABLES CON 99 = SOSPECHOSO
+table(fis$P42==99) 
+table(fis$P45==99) 
+table(fis$P50==99) 
+
+#Step 2: Measuring total damages per school
+#Specific damage and Total fissured educational spaces
+Totals <- fis[,c(1:9)]
+Fissures <- fis[,c(10:18)]
+tod_fissures <- Fissures/Totals #matrix with specific fissure damages 
+colnames(tod_fissures) <- c("fiss_aula","fiss_taller","fiss_acomp","fiss_medios","fiss_lab","fiss_encicl","fiss_ofdir","fiss_ofadm","fiss_dorm") #changing name of columns
+todos_recintos <- rowSums(Totals,na.rm=T) #Sum todos los recintos por escuela
+todos_fissures <- rowSums(Fissures,na.rm=T)
+todos_fiss_porc <- todos_fissures/todos_recintos #One column with total damage % (sum of all educ spaces)
+#Step 3: Checking results 
+head(Fissures)
+head(Totals)
+head(tod_fissures)
+head(todos_fissures)
+head(todos_recintos)
+head(todos_fiss_porc)
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Module 2: Physical condition - Infraestructure status
+#Leaks
+columns <- c(55:63,76:84)
+fis <- INM[,columns]  
+#Step1: 999 a NA
+table(fis==999) 
 fis[fis == 999] <- NA 
 summary(fis) #OJO QUE HAY VARIABLES CON 99 = SOSPECHOSO
 
-#Total educational spaces
-T_aula <- fis$P42
-T_taller <- fis$P43
-T_acomp <- fis$P44
-T_medios <- fis$P45
-T_lab <- fis$P46
-T_encicl <- fis$P47
-T_ofdir <- fis$P48
-T_ofadm <- fis$P49
-T_dorm <- fis$P50
-Tot <- T_aula + T_taller + T_acomp + T_medios + T_lab + T_encicl + T_ofdir + T_ofadm + T_dorm
-
-#Total fissured educational spaces
+#Step 2: Measuring total damages per school
+#Specific damage and Total fissured educational spaces
 Totals <- fis[,c(1:9)]
 Fissures <- fis[,c(10:18)]
-todos_recintos <- sum(fis[,c(1:9)], na.rm=T) #duda si al omitir, corre el espacio
+tod_leaks <- Fissures/Totals #matrix with specific damages 
+colnames(tod_leaks) <- c("leak_aula","leak_taller","leak_acomp","leak_medios","leak_lab","leak_encicl","leak_ofdir","leak_ofadm","leak_dorm") #changing name of columns
+todos_recintos <- rowSums(Totals,na.rm=T) #Sum todos los recintos por escuela
+todos_fissures <- rowSums(Fissures,na.rm=T)
+todos_leaks_porc <- todos_fissures/todos_recintos #One column with total damage % (sum of all educ spaces)
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Module 2: Physical condition - Infraestructure status
+#Broken glass
+columns <- c(55:63,86:94)
+fis <- INM[,columns]  
+#Step1: 999 a NA
+table(fis==999) 
+fis[fis == 999] <- NA 
+summary(fis) #OJO QUE HAY VARIABLES CON 99 = SOSPECHOSO
 
-#Consider div/0
-porc_fiss <- Fissures/Totals
+#Step 2: Measuring total damages per school
+#Specific damage and Total fissured educational spaces
+Totals <- fis[,c(1:9)]
+Fissures <- fis[,c(10:18)]
+tod_glass <- Fissures/Totals #matrix with specific damages 
+colnames(tod_glass) <- c("glass_aula","glass_taller","glass_acomp","glass_medios","glass_lab","glass_encicl","glass_ofdir","glass_ofadm","glass_dorm") #changing name of columns
+todos_recintos <- rowSums(Totals,na.rm=T) #Sum todos los recintos por escuela
+todos_fissures <- rowSums(Fissures,na.rm=T)
+todos_glass_porc <- todos_fissures/todos_recintos #One column with total damage % (sum of all educ spaces)
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Module 2: Physical condition - Infraestructure status
+#No door
+columns <- c(55:63,96:104)
+fis <- INM[,columns]  
+#Step1: 999 a NA
+table(fis==999) 
+fis[fis == 999] <- NA 
+summary(fis) #OJO QUE HAY VARIABLES CON 99 = SOSPECHOSO
+
+#Step 2: Measuring total damages per school
+#Specific damage and Total fissured educational spaces
+Totals <- fis[,c(1:9)]
+Fissures <- fis[,c(10:18)]
+tod_door <- Fissures/Totals #matrix with specific damages 
+colnames(tod_door) <- c("door_aula","door_taller","door_acomp","door_medios","door_lab","door_encicl","door_ofdir","door_ofadm","door_dorm") #changing name of columns
+todos_recintos <- rowSums(Totals,na.rm=T) #Sum todos los recintos por escuela
+todos_fissures <- rowSums(Fissures,na.rm=T)
+todos_door_porc <- todos_fissures/todos_recintos #One column with total damage % (sum of all educ spaces)
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Module 2: Physical condition - Infraestructure status
+#No electricity
+columns <- c(55:63,106:114)
+fis <- INM[,columns]  
+#Step1: 999 a NA
+table(fis==999) 
+fis[fis == 999] <- NA 
+summary(fis) #OJO QUE HAY VARIABLES CON 99 = SOSPECHOSO
+
+#Step 2: Measuring total damages per school
+#Specific damage and Total fissured educational spaces
+Totals <- fis[,c(1:9)]
+Fissures <- fis[,c(10:18)]
+tod_elect <- Fissures/Totals #matrix with specific damages 
+colnames(tod_door) <- c("elect_aula","elect_taller","elect_acomp","elect_medios","elect_lab","elect_encicl","elect_ofdir","elect_ofadm","elect_dorm") #changing name of columns
+todos_recintos <- rowSums(Totals,na.rm=T) #Sum todos los recintos por escuela
+todos_fissures <- rowSums(Fissures,na.rm=T)
+todos_elect_porc <- todos_fissures/todos_recintos #One column with total damage % (sum of all educ spaces)
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Module 3: Physical condition - Basic services spaces: fissures, leaks, glass, door, electricity.
+
+
 
