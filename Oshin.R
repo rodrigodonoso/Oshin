@@ -13,6 +13,8 @@ INM <- read.csv("~/Desktop/Oshin/TR_INMUEBLES.csv")
 CENTROS <- read.csv("~/Desktop/Oshin/TR_CENTROS.csv")
 INM_CONAFE <- read.csv("~/Desktop/Oshin/TR_CONAFE.csv")
 
+#Step 1: cleaning and setting the dataset. It will have 5 modules.
+
 library(plyr)
 #Overview
 str(INM)
@@ -46,7 +48,6 @@ data <-join(INM2,CENTROS2, type="left", by="ID_INM")
 data <- data[,c(1,39,2,3,4,5,44,6,45,40,41,42,43,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,7,33,34,35,36,37,38)]
 str(data)
 #data = General descriotion ok
-#------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
@@ -162,7 +163,6 @@ todos_elect_porc <- todos_fissures/todos_recintos #One column with total damage 
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------------------------------------------------
 #Module 3: Physical condition - Basic services spaces: fissures, leaks, glass, door, electricity.
 #Choosing columns
 basics <- INM[,c(38,41,42,43,44,45,46,47,48,49,50,51,52,53,54)] #total, fissures, leaks, glass, door, electricity, no water
@@ -184,7 +184,6 @@ basics$lavam_desperf_porc <- basics$P39/basics$P38
 basics$bebed_desperf_porc <- basics$P41/basics$P40
 
 basics2 <- basics[,c(16:25)]
-#------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
@@ -210,7 +209,6 @@ data2 <-join(data,test, type="left", by="ID_INM")
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------------------------------------------------
 #Module 5: Equipamiento
 Columns_2 <- c(102,105,108,117,120,123,124,163,171,172) #Pizarrones, alum sin silla, apoyarse, escr maestro, silla maestro, proyectores, enciclomedias,internet, compus, compus q sirvemn
 Equip <- CENTROS[,Columns_2]
@@ -219,5 +217,43 @@ colnames(Equip) <- c("Pizarr_falta","N_alum_s/silla","N_alum_s/mesa","N__mesa_ma
                      "proy_malos","encicl_malos","Internety/n","N_PC_falta","N_PC_buenos")
 
 data3 <-cbind(data2,Equip)
+write.csv(data3,file="dataset.csv") #Final dataset to elaborate the model
+
 #------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Model: Analisis in three levels by region / municipality / School
+#1. Diagnosis. 
+  #capacity vs students
+  #Nivel, modalidad, turno, control
+  #Tipo inm
+  #Mat paredes, techo y piso.
+  #Fuente AP, elect, Sewage
+  #Level of damage todos: fissures, leaks, glass, door, elect, 
+  #Level of damage bath: fissures, leaks, glass, door, elect, no water
+  #Equipamiento: Pizarra, silla, mesa (alum y prof), proyect, internet y pc.
+  
+#2. Ranking of priorities: 
+  #Clasificador escuela: 4-5 niveles infra (sin daño, urgente, mayor, moderado, daño leve) + ranking = Prioridad estatal
+  #Prioridad dentro de cada escuela = Priodad particular
+
+#3. Calculating the priorizador
+#Variables importantes:
+  #Subutlización y ojalá matricula historica
+  #Public vs Private
+  #Size: n alumnos / todos recintos
+  #Pobreza: Tipo inm / AP / Elect / Sewage / Mat techo / Mat paredes / Mat Piso (interesante mirar clusters) = INDICADOR DE POBREZA
+  #Cerco: seguridad
+  #Nivel de daño: Cómo lo calculamos? 4-5 niveles infra (sin daño, daño severo, daño moderado, daño leve)
+    #Daño condiciona estudio: aulas, bath, lavamanos.
+    #Daño total
+  #Carencia Equipamiento:Pizarra, silla, mesa (alum y prof), proyect, internet y pc.
+
+
+
+
+
+
 
