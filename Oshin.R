@@ -202,10 +202,9 @@ Prot_civil[,Columns4] <- ifelse(Prot_civil[,Columns4]==1,"1","0")
 
 #gathering damages_Module2
 ID_INM <- INM2[,1]
-test <- cbind(ID_INM,todos_recintos,todos_fiss_porc,tod_fissures,todos_leaks_porc,
-              todos_glass_porc,todos_door_porc,todos_elect_porc,basics2,Gen_descr,Prot_civil)
+test <- cbind(ID_INM,todos_recintos,todos_fiss_porc,todos_leaks_porc,
+              todos_glass_porc,todos_door_porc,todos_elect_porc,tod_fissures,tod_leaks,tod_glass,tod_door,tod_elect,basics2,Gen_descr,Prot_civil)
 data2 <-join(data,test, type="left", by="ID_INM")
-
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
@@ -224,6 +223,10 @@ write.csv(data3,file="dataset.csv") #Final dataset to elaborate the model
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------
+rm(list=ls()) 
+setwd("~/Desktop/Oshin")
+data <- read.csv("~/Desktop/Oshin/dataset.csv")
+
 #Model: Analisis in three levels by region / municipality / School
 #1. Diagnosis. 
   #capacity vs students
