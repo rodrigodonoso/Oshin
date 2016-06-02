@@ -227,8 +227,8 @@ rm(list=ls())
 setwd("~/Desktop/Oshin")
 data <- read.csv("~/Desktop/Oshin/dataset.csv")
 
-#Model: Analisis in three levels by region / municipality / School
-#1. Diagnosis. 
+#Model: Analisis in three levels by [region / municipality] / School
+#1. General Diagnosis: Antes de priorizar, mostrar cómo están las escuelas y su situación a nivel país / regiones.
   #capacity vs students
   #Nivel, modalidad, turno, control
   #Tipo inm
@@ -239,24 +239,17 @@ data <- read.csv("~/Desktop/Oshin/dataset.csv")
   #Equipamiento: Pizarra, silla, mesa (alum y prof), proyect, internet y pc.
   
 #2. Ranking of priorities: 
-  #Clasificador escuela: 4-5 niveles infra (sin daño, urgente, mayor, moderado, daño leve) + ranking = Prioridad estatal
-  #Prioridad dentro de cada escuela = Priodad particular
+  #Priorización por region: "distribute a bunch of money"
+    #Indice de pobreza = Situacion histórica de la escuela = Tipo inm / AP / Elect / Sewage / Mat techo / Mat paredes / Mat Piso /Cerco (interesante mirar clusters)
+    #Nivel de daño: (1) restrictivo funcionamiento y (2) no restrictivo funcionamiento    
+    #Tamaño: num alumnos y? 
+    #%capaidad utilizada y ojalá matrícula histórica
+    #Control: público / privado
+    #Equipamiento
 
-#3. Calculating the priorizador
-#Variables importantes:
-  #Subutlización y ojalá matricula historica
-  #Public vs Private
-  #Size: n alumnos / todos recintos
-  #Pobreza: Tipo inm / AP / Elect / Sewage / Mat techo / Mat paredes / Mat Piso (interesante mirar clusters) = INDICADOR DE POBREZA
-  #Cerco: seguridad
-  #Nivel de daño: Cómo lo calculamos? 4-5 niveles infra (sin daño, daño severo, daño moderado, daño leve)
-    #Daño condiciona estudio: aulas, bath, lavamanos.
-    #Daño total
-  #Carencia Equipamiento:Pizarra, silla, mesa (alum y prof), proyect, internet y pc.
-
-
-
-
-
-
-
+  #Priorizacion por escuela: "Qué queremos solucionar primero?" = (1) Daño restrictivo func, (2)Situc hist, (3) Daño no rest, (4) Equipamiento
+    #Opciónes: Pjte y/o cualitativo 4-5 niveles urgencia infra (sin problema, urgente, mayor, moderado, leve)
+      #Daño restrictivo: aulas, bath, lavamanos
+      #Situac historica: Tipo inm / AP / Elect / Sewage / Mat techo / Mat paredes / Mat Piso /Cerco
+      #Daño no restrictivo:
+      #Carencia Equipamiento: Pizarra, silla, mesa (alum y prof), proyect, internet y pc.
