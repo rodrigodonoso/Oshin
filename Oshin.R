@@ -246,6 +246,101 @@ data <- read.csv("~/Desktop/Oshin/dataset.csv")
     #%capaidad utilizada y ojalá matrícula histórica
     #Control: público / privado
     #Equipamiento
+    
+    # Points system to determine "poverty index"
+    pointsIP<-data[,c(1:7,40:46,108:112)]
+    
+    # Points according to type of construction
+    pointsIP$Tipo_inm[pointsIP$Tipo_inm==1||pointsIP$Tipo_inm==6||pointsIP$Tipo_inm==7||pointsIP$Tipo_inm==8]<-10
+    pointsIP$Tipo_inm[pointsIP$Tipo_inm==2]<-8
+    pointsIP$Tipo_inm[pointsIP$Tipo_inm==3]<-6
+    pointsIP$Tipo_inm[pointsIP$Tipo_inm==4]<-3
+    pointsIP$Tipo_inm[pointsIP$Tipo_inm==5]<-0
+    pointsIP$Tipo_inm[pointsIP$Tipo_inm==9]<-NA
+    
+    # Points according to source of drinkable water
+    pointsIP$fuenta_AP[pointsIP$fuenta_AP==1]<-10
+    pointsIP$fuenta_AP[pointsIP$fuenta_AP==2]<-8
+    pointsIP$fuenta_AP[pointsIP$fuenta_AP==3]<-6
+    pointsIP$fuenta_AP[pointsIP$fuenta_AP==4]<-3
+    pointsIP$fuenta_AP[pointsIP$fuenta_AP==5]<-20 # Definir qué puntaje asignar cuando la fuente es "otra"
+    pointsIP$fuenta_AP[pointsIP$fuenta_AP==6]<-0
+    pointsIP$fuenta_AP[pointsIP$fuenta_AP==9]<-NA
+    
+    # Points according to source of electricity
+    pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==1]<-5
+    pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==2]<-5
+    pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==3]<-3
+    pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==4]<-20 # Definir qué puntaje asignar cuando la fuente es "otra"
+    pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==5]<-0
+    pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==9]<-NA
+    
+    # Points according to existence of water tower
+    pointsIP$Cisterna[pointsIP$Cisterna==1]<-5
+    pointsIP$Cisterna[pointsIP$Cisterna==2]<-0
+    pointsIP$Cisterna[pointsIP$Cisterna==2]<-NA
+    
+    # Points according to existence of latrines
+    pointsIP$Letrina[pointsIP$Letrina==1]<-0
+    pointsIP$Letrina[pointsIP$Letrina==1]<-3
+    pointsIP$Letrina[pointsIP$Letrina==9]<-NA
+    
+    # Points according to existence of bathrooms
+    pointsIP$Bano[pointsIP$Bano==1]<-10
+    pointsIP$Bano[pointsIP$Bano==2]<-0
+    pointsIP$Bano[pointsIP$Bano==9]<-NA
+    
+    # Points according to existence of drains
+    pointsIP$Drenaje[pointsIP$Drenaje==1]<-10
+    pointsIP$Drenaje[pointsIP$Drenaje==2]<-10
+    pointsIP$Drenaje[pointsIP$Drenaje==9]<-NA
+    
+    # Points according to existence of "muro perimetral" 
+    pointsIP$Cerco_per[pointsIP$Cerco_per==1]<-10
+    pointsIP$Cerco_per[pointsIP$Cerco_per==2]<-5
+    pointsIP$Cerco_per[pointsIP$Cerco_per==3]<-0
+    pointsIP$Cerco_per[pointsIP$Cerco_per==4]<-10
+    pointsIP$Cerco_per[pointsIP$Cerco_per==9]<-NA
+    
+    # Points according to material of "muro perimetral" 
+    pointsIP$Mat_cerco[pointsIP$Mat_cerco==1]<-1
+    pointsIP$Mat_cerco[pointsIP$Mat_cerco==2]<-1
+    pointsIP$Mat_cerco[pointsIP$Mat_cerco==3]<-0.7
+    pointsIP$Mat_cerco[pointsIP$Mat_cerco==4]<-0.7
+    pointsIP$Mat_cerco[pointsIP$Mat_cerco==5]<-20 # Definir qué puntaje asignar cuando material es "otro"
+    pointsIP$Mat_cerco[pointsIP$Mat_cerco==9]<-NA
+    pointsIP$Mat_cerco[pointsIP$Mat_cerco==NA]<-1
+    
+    # Points according to material of walls
+    pointsIP$Mat_paredes[pointsIP$Mat_paredes==1]<-1
+    pointsIP$Mat_paredes[pointsIP$Mat_paredes==2]<-0.5
+    pointsIP$Mat_paredes[pointsIP$Mat_paredes==3]<-0.7
+    pointsIP$Mat_paredes[pointsIP$Mat_paredes==4]<-0.3
+    pointsIP$Mat_paredes[pointsIP$Mat_paredes==5]<-0.5
+    pointsIP$Mat_paredes[pointsIP$Mat_paredes==6]<-0.1
+    pointsIP$Mat_paredes[pointsIP$Mat_paredes==9]<-NA # Definir qué puntaje asignar cuando material es "no definido"
+    pointsIP$Mat_paredes[pointsIP$Mat_paredes==NA]<-NA # Definir qué puntaje asignar cuando material es "sin información"
+    
+    # Points according to material of ceiling
+    pointsIP$Mat_techo[pointsIP$Mat_techo==1]<-1
+    pointsIP$Mat_techo[pointsIP$Mat_techo==2]<-1
+    pointsIP$Mat_techo[pointsIP$Mat_techo==3]<-0.5
+    pointsIP$Mat_techo[pointsIP$Mat_techo==4]<-0.3
+    pointsIP$Mat_techo[pointsIP$Mat_techo==5]<-0.3
+    pointsIP$Mat_techo[pointsIP$Mat_techo==6]<-0.1
+    pointsIP$Mat_techo[pointsIP$Mat_techo==9]<-NA # Definir qué puntaje asignar cuando material es "no definido"
+    pointsIP$Mat_techo[pointsIP$Mat_techo==NA]<-NA # Definir qué puntaje asignar cuando material es "sin información"
+    
+    # Points according to material of floor
+    pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-0.7
+    pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-1
+    pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-0.2
+    pointsIP$Mat_piso[pointsIP$Mat_piso==9]<-NA # Definir qué puntaje asignar cuando material es "no definido"
+    pointsIP$Mat_piso[pointsIP$Mat_piso==NA]<-NA # Definir qué puntaje asignar cuando material es "sin información"
+    
+    pointsIP$Ind_Pobreza<-pointsIP$Mat_piso*pointsIP$Mat_techo*pointsIP$Mat_paredes*(pointsIP$Mat_cerco*pointsIP$Cerco_per+
+    pointsIP$Drenaje+pointsIP$Bano+pointsIP$Letrina+pointsIP$Cisterna+pointsIP$fuente_ELEC+pointsIP$fuenta_AP+pointsIP$Tipo_inm)
+    
 
   #Priorizacion por escuela: "Qué queremos solucionar primero?" = (1) Daño restrictivo func, (2)Situc hist, (3) Daño no rest, (4) Equipamiento
     #Opciónes: Pjte y/o cualitativo 4-5 niveles urgencia infra (sin problema, urgente, mayor, moderado, leve)
