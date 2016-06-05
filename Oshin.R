@@ -351,5 +351,137 @@ data <- read.csv("~/Desktop/Oshin/dataset.csv")
     #Opciónes: Pjte y/o cualitativo 4-5 niveles urgencia infra (sin problema, urgente, mayor, moderado, leve)
       #Daño restrictivo: aulas, bath, lavamanos
       #Situac historica: Tipo inm / AP / Elect / Sewage / Mat techo / Mat paredes / Mat Piso /Cerco
-      #Daño no restrictivo:
+      #Daño no restrictivo: 
       #Carencia Equipamiento: Pizarra, silla, mesa (alum y prof), proyect, internet y pc.
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#Level of damage:
+#(1) Daño restrictivo-variables: [todos fiss % + (fiss + elect)aula%  + (fiss + elect + water)bath%]
+  #Si todos fiss % > 50% = grave
+  #Si todos fiss % > 30% = mayor
+  #Si todos fiss % > 15% = moderado  
+  #Si todos fiss % < 15% = leve (may 0)
+  #Si todos fiss % = 0% = sin daño
+  #Si todos fiss % < 50%
+    #Si Prom pond 70% - 30% (fiss + elect)aula% > 50% ó Si Avg. (fiss + elect + water)bath% > 50% = grave
+    #Si Prom pond 70% - 30%(fiss + elect)% > 30% ó Si PP 50%-30%-20% (fiss + elect + water)% > 30% = mayor (del resto)
+    #Si Prom pond 70% - 30%(fiss + elect)% > 15% ó Si PP 50%-30%-20% (fiss + elect + water)% > 15% = moderado (del resto)
+    #Si Prom pond 70% - 30%(fiss + elect)% < 15% ó Si PP 50%-30%-20% (fiss + elect + water)% < 15% = leve (may 0)
+
+#Level 1
+pond1 <- 0.7
+pond2 <- 1-pond1
+pond3 <- 1/3
+data$dano_rest[data$fiss_aula_porc*pond1+data$elect_aula*pond2 >.6 | data$bath_fiss_porc*pond3+data$bath_elect_porc*pond3+data$bath_no_water_porc*pond3 >.6] <- "grave"
+data$dano_rest[data$fiss_aula_porc*pond1+data$elect_aula*pond2 <.6 &
+                 data$fiss_aula_porc*pond1+data$elect_aula*pond2 >.3 | 
+                 data$bath_fiss_porc*pond3+data$bath_elect_porc*pond3+data$bath_no_water_porc*pond3 <.6 &
+                 data$bath_fiss_porc*pond3+data$bath_elect_porc*pond3+data$bath_no_water_porc*pond3 >.3] <- "mayor"
+data$dano_rest[data$fiss_aula_porc*pond1+data$elect_aula*pond2 <.3 &
+                 data$fiss_aula_porc*pond1+data$elect_aula*pond2 >.15 | 
+                 data$bath_fiss_porc*pond3+data$bath_elect_porc*pond3+data$bath_no_water_porc*pond3 <.6 &
+                 data$bath_fiss_porc*pond3+data$bath_elect_porc*pond3+data$bath_no_water_porc*pond3 >.3] <- "moderado"
+data$dano_rest[data$fiss_aula_porc*pond1+data$elect_aula*pond2 <.15 &
+                 data$fiss_aula_porc*pond1+data$elect_aula*pond2 >0 | 
+                 data$bath_fiss_porc*pond3+data$bath_elect_porc*pond3+data$bath_no_water_porc*pond3 <.6 &
+                 data$bath_fiss_porc*pond3+data$bath_elect_porc*pond3+data$bath_no_water_porc*pond3 >.3] <- "leve"
+
+head(data$dano_rest, n=30)
+table(data$dano_rest)
+
+#Level 2
+data$dano_rest[data$todos_fiss_porc >.6] <- "grave"
+data$dano_rest[data$todos_fiss_porc >.3 & data$todos_fiss_porc <.6] <- "mayor"
+data$dano_rest[data$todos_fiss_porc >.15 & data$todos_fiss_porc <.3] <- "moderado"
+data$dano_rest[data$todos_fiss_porc >.0 & data$todos_fiss_porc <.15] <- "leve"
+data$dano_rest[data$todos_fiss_porc==0] <- "sin_dano"
+#data$dano_rest[(data$todos_fiss_porc + data$todos_leaks_porc + data$todos_glass_porc + data$todos_door_porc + data$todos_elect_porc) ==0 ] <- "sin_dano"
+head(data$dano_rest, n=30)
+table <- table(data$dano_rest, useNA = "always")
+pie(table, col=c("black","yellow","red","orange","green","white"))
+help(barplot)
+?pie
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#(2) Indice Pobreza-variables: [tipo inm + fuente(AP+Elect+Letrina+Baño+Drenaje) + mat(Paredes,Techo,Piso)]
+  #Si tipo inm = 4 (movil) | 5 (sin const)  = 1
+  #Si tipo inm2 = 3 (provisorio) = 1
+  #Si fuente AP = 3 (pozo) | 2 (Pipa) | 6 (no tiene)  = 1
+  #Si fuente Elect = 5 (no tiene)  = 1
+  #Si Letrina = 1 (si)  = 1
+  #Si baño = 2 (no)  = 1
+  #Si drenaje = 2 (no)  = 1
+  #Si cerco per = 3 (no tiene) = 1
+  #Si Mat paredes = 4 (bambú) | 5 (asbesto carton) | 6 (desecho) = 1
+  #Si Mat techo = 5 (asbesto carton) | 6 (desecho) = 1
+  #Si Mat piso = 3 (tierra) = 1
+
+# Poverty index 11 columns
+Totals3 <- data[,c(40:46,108:112)] 
+Totals3$inmueble[Totals3$Tipo_inm==4|Totals3$Tipo_inm==5]<-1
+Totals3$inmueble2[Totals3$Tipo_inm==3]<-1
+Totals3$AP[Totals3$fuenta_AP==3|Totals3$fuenta_AP==2|Totals3$fuenta_AP==6] <- 1
+Totals3$ELEC[Totals3$fuente_ELEC==5]<-1
+Totals3$LETR[Totals3$Letrina==1]<-1
+Totals3$BANO[Totals3$Bano==2]<-1
+Totals3$DREN[Totals3$Drenaje==2]<-1
+Totals3$CERCO[Totals3$Cerco_per==3]<-1
+Totals3$PARED[Totals3$Mat_paredes==4|Totals3$Mat_paredes==5|Totals3$Mat_paredes==6] <- 1
+Totals3$TECHO[Totals3$Mat_techo==5|Totals3$Mat_techo==6]<-1
+Totals3$PISO[Totals3$Mat_piso==3]<-1
+
+Totals4 <- Totals3[,c(13:23)]
+Totals4$pov_index <- rowSums(Totals4,na.rm=T) #Sum todos los recintos por escuela
+hist(Totals4$pov_index)
+
+#goes from the lower to higher category
+Totals4$pov_index2[Totals4$pov_index > 0 ] <- "leve"
+Totals4$pov_index2[Totals4$pov_index > 3 ] <- "moderado"
+Totals4$pov_index2[Totals4$pov_index > 6 ] <- "mayor"
+Totals4$pov_index2[Totals4$inmueble == 1 & Totals4$AP == 1] <- "grave"
+Totals4$pov_index2[Totals4$pov_index > 9 ] <- "grave"
+Totals4$pov_index2 <- replace(Totals4$pov_index2,which(is.na(Totals4$pov_index2)),"sin daño")
+Totals4$pov_index2[Totals3$Tipo_inm == 9 | (Totals3$fuenta_AP == 9 | is.na(Totals3$fuenta_AP)) & 
+                  (Totals3$Cisterna == 9 | is.na(Totals3$Cisterna)) &
+                  (Totals3$Letrina == 9 | is.na(Totals3$Letrina)) &
+                  (Totals3$Bano == 9 | is.na(Totals3$Bano)) &
+                  (Totals3$Drenaje == 9 | is.na(Totals3$Drenaje)) &
+                  (Totals3$Cerco_per == 9 | is.na(Totals3$Cerco_per)) & 
+                  (Totals3$Mat_paredes == 9 | is.na(Totals3$Mat_paredes)) &
+                  (Totals3$Mat_techo == 9 | is.na(Totals3$Mat_techo)) &
+                  (Totals3$Mat_piso == 9 | is.na(Totals3$Mat_piso))] <- "sin info"
+
+table2 <- table(Totals4$pov_index2)
+table2
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#(3) Daño no restrictivo-variables: [todos(leaks + glass + door + elect)% + (leaks + glass + door + tazas + mingi +lavam + bebed)bath%]
+Totals5 <- data[,c(49:52,99:101,104:107)] 
+n <- 1.5
+p1 <- n/11 #todos leaks, todos elect, bath leaks, tazas desp
+p2 <- ((1-p1*4))/7
+p2
+sum(p1*4+p2*7) #test
+Totals5$p1 <- p1 
+Totals5$p2 <- p2
+Totals6 <- Totals5
+Totals6[,c(1,4,5,8)] <- Totals6[,c(1,4,5,8)]*Totals6$p1
+Totals6[,c(2,3,6,7,9,10,11)] <- Totals6[,c(2,3,6,7,9,10,11)]*Totals6$p2 #Matrix 6 con ponderadores listos
+Totals7 <- Totals6[,c(1:11)]
+Totals7$dano_NO_rest <- rowSums(Totals7,na.rm=T) #Sum todos los recintos por escuela
+boxplot(Totals7$dano_NO_rest)
+mean(Totals7$dano_NO_rest)
+sd(Totals7$dano_NO_rest)
+
+#Level 1
+Totals7$dano_NO_rest2[Totals7$dano_NO_rest >.6] <- "grave"
+Totals7$dano_NO_rest2[Totals7$dano_NO_rest >.3 & Totals7$dano_NO_rest <.6] <- "mayor"
+Totals7$dano_NO_rest2[Totals7$dano_NO_rest >.15 & Totals7$dano_NO_rest <.3] <- "moderado"
+Totals7$dano_NO_rest2[Totals7$dano_NO_rest >.0 & Totals7$dano_NO_rest <.15] <- "leve"
+Totals7$dano_NO_rest2[Totals7$dano_NO_rest==0] <- "sin_dano"
+
+table3 <- table(Totals7$dano_NO_rest2)
+table3
+#------------------------------------------------------------------------------------------------------------------------------------------------
+#(4) Equipamiento: 15-19 -- 119-128
+
+
+
