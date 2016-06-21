@@ -247,101 +247,141 @@ data <- read.csv("~/Desktop/Oshin/dataset.csv")
     #Control: público / privado
     #Equipamiento
   
-  # INDICE PROBREZA
-  #-------------------------------------------------------------------------------------------------------------------------------------
-  #-------------------------------------------------------------------------------------------------------------------------------------
-  
-  # Points system to determine "poverty index"
-  pointsIP<-data[,c(1:7,40:46,108:112)]
-  
-  # Points according to type of construction
-  pointsIP$Tipo_inm[pointsIP$Tipo_inm==1||pointsIP$Tipo_inm==6||pointsIP$Tipo_inm==7||pointsIP$Tipo_inm==8]<-10
-  pointsIP$Tipo_inm[pointsIP$Tipo_inm==2]<-8
-  pointsIP$Tipo_inm[pointsIP$Tipo_inm==3]<-6
-  pointsIP$Tipo_inm[pointsIP$Tipo_inm==4]<-3
-  pointsIP$Tipo_inm[pointsIP$Tipo_inm==5]<-0
-  pointsIP$Tipo_inm[pointsIP$Tipo_inm==9]<-NA
-  
-  # Points according to source of drinkable water
-  pointsIP$fuenta_AP[pointsIP$fuenta_AP==1]<-10
-  pointsIP$fuenta_AP[pointsIP$fuenta_AP==2]<-8
-  pointsIP$fuenta_AP[pointsIP$fuenta_AP==3]<-6
-  pointsIP$fuenta_AP[pointsIP$fuenta_AP==4]<-3
-  pointsIP$fuenta_AP[pointsIP$fuenta_AP==5]<-NA 
-  pointsIP$fuenta_AP[pointsIP$fuenta_AP==6]<-0
-  pointsIP$fuenta_AP[pointsIP$fuenta_AP==9]<-NA
-  
-  # Points according to source of electricity
-  pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==1||pointsIP$fuente_ELEC==2]<-5
-  pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==3]<-3
-  pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==4]<-NA 
-  pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==5]<-0
-  pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==9]<-NA
-  
-  # Points according to existence of water tower
-  pointsIP$Cisterna[pointsIP$Cisterna==1]<-5
-  pointsIP$Cisterna[pointsIP$Cisterna==2]<-0
-  pointsIP$Cisterna[pointsIP$Cisterna==9]<-NA
-  
-  # Points according to existence of latrines
-  pointsIP$Letrina[pointsIP$Letrina==1]<-0
-  pointsIP$Letrina[pointsIP$Letrina==2]<-5
-  pointsIP$Letrina[pointsIP$Letrina==9]<-NA
-  
-  # Points according to existence of bathrooms
-  pointsIP$Bano[pointsIP$Bano==1]<-10
-  pointsIP$Bano[pointsIP$Bano==2]<-0
-  pointsIP$Bano[pointsIP$Bano==9]<-NA
-  
-  # Points according to existence of drains
-  pointsIP$Drenaje[pointsIP$Drenaje==1]<-10
-  pointsIP$Drenaje[pointsIP$Drenaje==2]<-0
-  pointsIP$Drenaje[pointsIP$Drenaje==9]<-NA
-  
-  # Points according to existence of "muro perimetral" 
-  pointsIP$Cerco_per[pointsIP$Cerco_per==1]<-10
-  pointsIP$Cerco_per[pointsIP$Cerco_per==2]<-5
-  pointsIP$Cerco_per[pointsIP$Cerco_per==3]<-0
-  pointsIP$Cerco_per[pointsIP$Cerco_per==4]<-10
-  pointsIP$Cerco_per[pointsIP$Cerco_per==9]<-NA
-  
-  # Points according to material of "muro perimetral" 
-  pointsIP$Mat_cerco[pointsIP$Mat_cerco==1]<-1
-  pointsIP$Mat_cerco[pointsIP$Mat_cerco==2]<-1
-  pointsIP$Mat_cerco[pointsIP$Mat_cerco==3]<-0.5
-  pointsIP$Mat_cerco[pointsIP$Mat_cerco==4]<-0.5
-  pointsIP$Mat_cerco[pointsIP$Mat_cerco==5]<-NA # Definir qué puntaje asignar cuando material es "otro"
-  pointsIP$Mat_cerco[pointsIP$Mat_cerco==9]<-NA
-  
-  # Points according to material of walls
-  pointsIP$Mat_paredes[pointsIP$Mat_paredes==1]<-1.5
-  pointsIP$Mat_paredes[pointsIP$Mat_paredes==2]<-0.75
-  pointsIP$Mat_paredes[pointsIP$Mat_paredes==3]<-1
-  pointsIP$Mat_paredes[pointsIP$Mat_paredes==4]<-0.5
-  pointsIP$Mat_paredes[pointsIP$Mat_paredes==5]<-0.75
-  pointsIP$Mat_paredes[pointsIP$Mat_paredes==6]<-0.5
-  pointsIP$Mat_paredes[pointsIP$Mat_paredes==9]<-0.5
-  pointsIP$Mat_paredes[pointsIP$Mat_paredes==NA]<-0.5
-  
-  # Points according to material of ceiling
-  pointsIP$Mat_techo[pointsIP$Mat_techo==1]<-1.5
-  pointsIP$Mat_techo[pointsIP$Mat_techo==2]<-1
-  pointsIP$Mat_techo[pointsIP$Mat_techo==3]<-0.75
-  pointsIP$Mat_techo[pointsIP$Mat_techo==4]<-0.5
-  pointsIP$Mat_techo[pointsIP$Mat_techo==5]<-0.75
-  pointsIP$Mat_techo[pointsIP$Mat_techo==6]<-0.5
-  pointsIP$Mat_techo[pointsIP$Mat_techo==9]<-0.5
-  pointsIP$Mat_techo[pointsIP$Mat_techo==NA]<-0.5
-  
-  # Points according to material of floor
-  pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-1
-  pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-1.2
-  pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-0.75
-  pointsIP$Mat_piso[pointsIP$Mat_piso==9]<-0.5
-  pointsIP$Mat_piso[pointsIP$Mat_piso==NA]<-0.5
-  
-  pointsIP$Ind_Pobreza<-pointsIP$Mat_piso*pointsIP$Mat_techo*pointsIP$Mat_paredes*(pointsIP$Mat_cerco*pointsIP$Cerco_per+
-  pointsIP$Drenaje+pointsIP$Bano+pointsIP$Letrina+pointsIP$Cisterna+pointsIP$fuente_ELEC+pointsIP$fuenta_AP+pointsIP$Tipo_inm)
+rm(list=ls()) 
+data <- read.csv("dataset.csv")
+
+# INDICE PROBREZA
+#-------------------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+# Points system to determine "poverty index"
+pointsIP<-data[,c(1:6,39:46,107:111)]
+
+# Points according to type of construction
+pointsIP$Tipo_inm[pointsIP$Tipo_inm==1||pointsIP$Tipo_inm==6||pointsIP$Tipo_inm==7||pointsIP$Tipo_inm==8]<-10
+pointsIP$Tipo_inm[pointsIP$Tipo_inm==2]<-8
+pointsIP$Tipo_inm[pointsIP$Tipo_inm==3]<-6
+pointsIP$Tipo_inm[pointsIP$Tipo_inm==4]<-3
+pointsIP$Tipo_inm[pointsIP$Tipo_inm==5]<-0
+pointsIP$Tipo_inm[pointsIP$Tipo_inm==9]<-NA
+
+# Points according to source of drinkable water
+pointsIP$fuenta_AP[pointsIP$fuenta_AP==1]<-10
+pointsIP$fuenta_AP[pointsIP$fuenta_AP==2]<-8
+pointsIP$fuenta_AP[pointsIP$fuenta_AP==3]<-6
+pointsIP$fuenta_AP[pointsIP$fuenta_AP==4]<-3
+pointsIP$fuenta_AP[pointsIP$fuenta_AP==5]<-NA 
+pointsIP$fuenta_AP[pointsIP$fuenta_AP==6]<-0
+pointsIP$fuenta_AP[pointsIP$fuenta_AP==9]<-NA
+
+# Points according to source of electricity
+pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==1||pointsIP$fuente_ELEC==2]<-5
+pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==3]<-3
+pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==4]<-NA 
+pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==5]<-0
+pointsIP$fuente_ELEC[pointsIP$fuente_ELEC==9]<-NA
+
+# Points according to existence of water tower
+pointsIP$Cisterna[pointsIP$Cisterna==1]<-5
+pointsIP$Cisterna[pointsIP$Cisterna==2]<-0
+pointsIP$Cisterna[pointsIP$Cisterna==9]<-NA
+
+# Points according to existence of latrines
+pointsIP$Letrina[pointsIP$Letrina==1]<-0
+pointsIP$Letrina[pointsIP$Letrina==2]<-5
+pointsIP$Letrina[pointsIP$Letrina==9]<-NA
+
+# Points according to existence of bathrooms
+pointsIP$Bano[pointsIP$Bano==1]<-10
+pointsIP$Bano[pointsIP$Bano==2]<-0
+pointsIP$Bano[pointsIP$Bano==9]<-NA
+
+# Points according to existence of drains
+pointsIP$Drenaje[pointsIP$Drenaje==1]<-10
+pointsIP$Drenaje[pointsIP$Drenaje==2]<-0
+pointsIP$Drenaje[pointsIP$Drenaje==9]<-NA
+
+# Points according to existence of "muro perimetral" 
+pointsIP$Cerco_per[pointsIP$Cerco_per==1]<-10
+pointsIP$Cerco_per[pointsIP$Cerco_per==2]<-5
+pointsIP$Cerco_per[pointsIP$Cerco_per==3]<-0
+pointsIP$Cerco_per[pointsIP$Cerco_per==4]<-10
+pointsIP$Cerco_per[pointsIP$Cerco_per==9]<-NA
+
+# Points according to material of "muro perimetral" 
+pointsIP$Mat_cerco[pointsIP$Mat_cerco==1]<-1
+pointsIP$Mat_cerco[pointsIP$Mat_cerco==2]<-1
+pointsIP$Mat_cerco[pointsIP$Mat_cerco==3]<-0.5
+pointsIP$Mat_cerco[pointsIP$Mat_cerco==4]<-0.5
+pointsIP$Mat_cerco[pointsIP$Mat_cerco==5]<-NA # Definir qué puntaje asignar cuando material es "otro"
+pointsIP$Mat_cerco[pointsIP$Mat_cerco==9]<-NA
+
+# Points according to material of walls
+pointsIP$Mat_paredes[pointsIP$Mat_paredes==1]<-1.5
+pointsIP$Mat_paredes[pointsIP$Mat_paredes==2]<-0.75
+pointsIP$Mat_paredes[pointsIP$Mat_paredes==3]<-1
+pointsIP$Mat_paredes[pointsIP$Mat_paredes==4]<-0.5
+pointsIP$Mat_paredes[pointsIP$Mat_paredes==5]<-0.75
+pointsIP$Mat_paredes[pointsIP$Mat_paredes==6]<-0.5
+pointsIP$Mat_paredes[pointsIP$Mat_paredes==9]<-0.5
+pointsIP$Mat_paredes[pointsIP$Mat_paredes==NA]<-0.5
+
+# Points according to material of ceiling
+pointsIP$Mat_techo[pointsIP$Mat_techo==1]<-1.5
+pointsIP$Mat_techo[pointsIP$Mat_techo==2]<-1
+pointsIP$Mat_techo[pointsIP$Mat_techo==3]<-0.75
+pointsIP$Mat_techo[pointsIP$Mat_techo==4]<-0.5
+pointsIP$Mat_techo[pointsIP$Mat_techo==5]<-0.75
+pointsIP$Mat_techo[pointsIP$Mat_techo==6]<-0.5
+pointsIP$Mat_techo[pointsIP$Mat_techo==9]<-0.5
+pointsIP$Mat_techo[pointsIP$Mat_techo==NA]<-0.5
+
+# Points according to material of floor
+pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-1
+pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-1.2
+pointsIP$Mat_piso[pointsIP$Mat_piso==1]<-0.75
+pointsIP$Mat_piso[pointsIP$Mat_piso==9]<-0.5
+pointsIP$Mat_piso[pointsIP$Mat_piso==NA]<-0.5
+
+pointsIP$Tipo_inm<-as.numeric(pointsIP$Tipo_inm)
+pointsIP$fuenta_AP<-as.numeric(pointsIP$fuenta_AP)
+pointsIP$fuente_ELEC<-as.numeric(pointsIP$fuente_ELEC)
+pointsIP$Cisterna<-as.numeric(pointsIP$Cisterna)
+pointsIP$Letrina<-as.numeric(pointsIP$Letrina)
+pointsIP$Bano<-as.numeric(pointsIP$Bano)
+pointsIP$Cerco_per<-as.numeric(pointsIP$Cerco_per)
+pointsIP$Mat_cerco<-as.numeric(pointsIP$Mat_cerco)
+pointsIP$Mat_paredes<-as.numeric(pointsIP$Mat_paredes)
+pointsIP$Mat_techo<-as.numeric(pointsIP$Mat_techo)
+pointsIP$Mat_piso<-as.numeric(pointsIP$Mat_piso)
+
+
+pointsIP$Ind_Pobreza<-pointsIP$Mat_piso*pointsIP$Mat_techo*pointsIP$Mat_paredes*(pointsIP$Mat_cerco*pointsIP$Cerco_per+
+pointsIP$Drenaje+pointsIP$Bano+pointsIP$Letrina+pointsIP$Cisterna+pointsIP$fuente_ELEC+pointsIP$fuenta_AP+pointsIP$Tipo_inm)
+                                                                                   
+pointsIP$Ind_Pobreza[is.na(pointsIP$Ind_Pobreza)]<--1
+
+maxIP<-max(pointsIP$Ind_Pobreza)
+step<-maxIP/5
+
+pointsIP$Cat_Pobreza[pointsIP$Ind_Pobreza==-1]<-"falta informacion"
+pointsIP$Cat_Pobreza[pointsIP$Ind_Pobreza>0 & pointsIP$Ind_Pobreza<=step]<-"pobreza extrema"
+pointsIP$Cat_Pobreza[pointsIP$Ind_Pobreza>step & pointsIP$Ind_Pobreza<=2*step]<-"pobreza moderada"
+pointsIP$Cat_Pobreza[pointsIP$Ind_Pobreza>2*step & pointsIP$Ind_Pobreza<=3*step]<-"pobreza moderada"
+pointsIP$Cat_Pobreza[pointsIP$Ind_Pobreza>3*step & pointsIP$Ind_Pobreza<=4*step]<-"pobreza leve"
+pointsIP$Cat_Pobreza[pointsIP$Ind_Pobreza>4*step & pointsIP$Ind_Pobreza<=maxIP]<-"sin pobreza"
+
+porcentajes<-vector()
+
+porcentajes$Porc_FaltaInf<-length(pointsIP$Cat_Pobreza[pointsIP$Cat_Pobreza=="falta informacion"])/length(pointsIP$Cat_Pobreza)*100
+porcentajes$Porc_Extrema<-length(pointsIP$Cat_Pobreza[pointsIP$Cat_Pobreza=="pobreza extrema"])/length(pointsIP$Cat_Pobreza)*100
+porcentajes$Porc_Moderada<-length(pointsIP$Cat_Pobreza[pointsIP$Cat_Pobreza=="pobreza moderada"])/length(pointsIP$Cat_Pobreza)*100
+porcentajes$Porc_Leve<-length(pointsIP$Cat_Pobreza[pointsIP$Cat_Pobreza=="pobreza leve"])/length(pointsIP$Cat_Pobreza)*100
+porcentajes$Porc_SinPob<-length(pointsIP$Cat_Pobreza[pointsIP$Cat_Pobreza=="sin pobreza"])/length(pointsIP$Cat_Pobreza)*100
+
+porcentajes<-as.data.frame(porcentajes)
+
+write.csv(pointsIP,file="pointsIP.csv")
   
   # NIVEL DAÑO
   #-------------------------------------------------------------------------------------------------------------------------------------
