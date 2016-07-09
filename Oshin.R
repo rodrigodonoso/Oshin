@@ -380,9 +380,100 @@ porcentajes<-as.data.frame(porcentajes)
 
 write.csv(pointsIP,file="pointsIP.csv")
   
-  # NIVEL DAÑO
-  #-------------------------------------------------------------------------------------------------------------------------------------
-  #-------------------------------------------------------------------------------------------------------------------------------------
+rm(list=ls()) 
+data <- read.csv("dataset.csv")
+
+# NIVEL DAÑO
+#-------------------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+# Points system to determine "poverty index"
+dano<-data[,c(1:9,14:22,47:51,52:106)]
+
+sumaleve<-c(34:38,43:47,52:56,71:73,78)
+sumamedio<-c(24,30:31,60,68:69,76)
+sumagrave<-c(32:33,39:42,48:51,57:59,66:67,70,74:75,77)
+
+danoleve<-dano[,sumaleve]
+danomedio<-dano[,sumamedio]
+danograve<-dano[,sumagrave]
+
+for (i in 1:dim(danoleve)[2])
+{
+  danoleve[,i][danoleve[,i]<=0.2]<-1
+  danoleve[,i][danoleve[,i]>0.2 & danoleve[,i]<=0.4]<-2
+  danoleve[,i][danoleve[,i]>0.4 & danoleve[,i]<=0.6]<-3
+  danoleve[,i][danoleve[,i]>0.6 & danoleve[,i]<=0.8]<-4
+  danoleve[,i][danoleve[,i]>0.8 & danoleve[,i]<=1.0]<-5
+}
+
+for (i in 1:dim(danomedio)[2])
+{
+  danomedio[,i][danomedio[,i]<=0.2]<-2
+  danomedio[,i][danomedio[,i]>0.2 & danomedio[,i]<=0.4]<-4
+  danomedio[,i][danomedio[,i]>0.4 & danomedio[,i]<=0.6]<-6
+  danomedio[,i][danomedio[,i]>0.6 & danomedio[,i]<=0.8]<-8
+  danomedio[,i][danomedio[,i]>0.8 & danomedio[,i]<=1.0]<-10
+}
+
+for (i in 1:dim(danograve)[2])
+{
+  danograve[,i][danograve[,i]<=0.2]<-3
+  danograve[,i][danograve[,i]>0.2 & danograve[,i]<=0.4]<-6
+  danograve[,i][danograve[,i]>0.4 & danograve[,i]<=0.6]<-9
+  danograve[,i][danograve[,i]>0.6 & danograve[,i]<=0.8]<-12
+  danograve[,i][danograve[,i]>0.8 & danograve[,i]<=1.0]<-15
+}
+
+fisurastotal<-rowSums(cbind(danograve[,c(1)],danomedio[,c(1:3,6)],danoleve[,c(1,5)]),na.rm=TRUE)
+leakstotal<-rowSums(cbind(danograve[,c(2:5,17)],danoleve[,c(1,5)]),na.rm=TRUE)
+glasstotal<-rowSums(cbind(danograve[,c(6:9)],danoleve[,c(6:10,16)]),na.rm=TRUE)
+doortotal<-rowSums(cbind(danograve[,c(10:13)],danoleve[,c(11:15,17)]),na.rm=TRUE)
+electtotal<-rowSums(cbind(danograve[,c(14:15)],danomedio[,c(4:5)],danoleve[,c(18)]),na.rm=TRUE)
+
+fisurastotal<-as.data.frame(fisurastotal)
+leakstotal<-as.data.frame(leakstotal)
+glasstotal<-as.data.frame(glasstotal)
+doortotal<-as.data.frame(doortotal)
+electtotal<-as.data.frame(electtotal)
+
+# pondano<-cbind(dano$todos_fiss_porc,dano$todos_leaks_porc,dano$todos_glass_porc,
+#                  dano$todos_door_porc,dano$todos_elect_porc)
+# 
+# pondanomedio<-c(1,4:5)
+# pondanograve<-c(2:3)
+# 
+# for (i in 1:length(pondanomedio))
+# {
+#   j<-pondanomedio[i]
+#   pondano[,j][pondano[,j]<=0.2]<-0.4
+#   pondano[,j][pondano[,j]>0.2 & pondano[,j]<=0.4]<-0.8
+#   pondano[,j][pondano[,j]>0.4 & pondano[,j]<=0.6]<-1.2
+#   pondano[,j][pondano[,j]>0.6 & pondano[,j]<=0.8]<-1.6
+#   pondano[,j][pondano[,j]>0.8 & pondano[,j]<=1.0]<-2.0
+# }
+# 
+# for (i in 1:length(pondanograve))
+# {
+#   j<-pondanograve[i]
+#   pondano[,j][pondano[,j]<=0.2]<-0.4
+#   pondano[,j][pondano[,j]>0.2 & pondano[,j]<=0.4]<-0.8
+#   pondano[,j][pondano[,j]>0.4 & pondano[,j]<=0.6]<-1.2
+#   pondano[,j][pondano[,j]>0.6 & pondano[,j]<=0.8]<-1.6
+#   pondano[,j][pondano[,j]>0.8 & pondano[,j]<=1.0]<-2.0
+# }
+
+
+pondutil<-dano[,c(7:8)]
+pondutil$Utilizacion<-pondutil$N_Alum_inscr/pondutil$N_Alum_capac
+pondutil$Ponderador[pondutil$Utilizacion<=0.2]<-0.25
+pondutil$Ponderador[pondutil$Utilizacion>0.2 & pondutil$Utilizacion<=0.4]<-0.50
+pondutil$Ponderador[pondutil$Utilizacion>0.4 & pondutil$Utilizacion<=0.6]<-0.75
+pondutil$Ponderador[pondutil$Utilizacion>0.6 & pondutil$Utilizacion<=0.8]<-1.0
+pondutil$Ponderador[pondutil$Utilizacion>0.8 & pondutil$Utilizacion<=1.0]<-1.25
+pondutil$Ponderador[pondutil$Utilizacion>1.0]<-1.5
+pondutil$Ponderador[is.na(pondutil$Utilizacion)]<-1.0 #Si no hay informacion de N° alumnos, se asume utilizacion "normal"
+
   
   #Priorizacion por escuela: "Qué queremos solucionar primero?" = (1) Daño restrictivo func, (2)Situc hist, (3) Daño no rest, (4) Equipamiento
     #Opciónes: Pjte y/o cualitativo 4-5 niveles urgencia infra (sin problema, urgente, mayor, moderado, leve)
