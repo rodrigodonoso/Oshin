@@ -387,7 +387,6 @@ data <- read.csv("dataset.csv")
 #-------------------------------------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------------------
 
-# Points system to determine "poverty index"
 dano<-data[,c(1:9,14:22,47:51,52:106)]
 
 sumaleve<-c(34:38,43:47,52:56,71:73,78)
@@ -398,31 +397,35 @@ danoleve<-dano[,sumaleve]
 danomedio<-dano[,sumamedio]
 danograve<-dano[,sumagrave]
 
+pointsleve<-danoleve
+pointsmedio<-danomedio
+pointsgrave<-danograve
+
 for (i in 1:dim(danoleve)[2])
 {
-  danoleve[,i][danoleve[,i]<=0.2]<-1
-  danoleve[,i][danoleve[,i]>0.2 & danoleve[,i]<=0.4]<-2
-  danoleve[,i][danoleve[,i]>0.4 & danoleve[,i]<=0.6]<-3
-  danoleve[,i][danoleve[,i]>0.6 & danoleve[,i]<=0.8]<-4
-  danoleve[,i][danoleve[,i]>0.8 & danoleve[,i]<=1.0]<-5
+  pointsleve[,i][danoleve[,i]<=0.2]<-1
+  pointsleve[,i][danoleve[,i]>0.2 & danoleve[,i]<=0.4]<-2
+  pointsleve[,i][danoleve[,i]>0.4 & danoleve[,i]<=0.6]<-3
+  pointsleve[,i][danoleve[,i]>0.6 & danoleve[,i]<=0.8]<-4
+  pointsleve[,i][danoleve[,i]>0.8 & danoleve[,i]<=1.0]<-5
 }
 
 for (i in 1:dim(danomedio)[2])
 {
-  danomedio[,i][danomedio[,i]<=0.2]<-2
-  danomedio[,i][danomedio[,i]>0.2 & danomedio[,i]<=0.4]<-4
-  danomedio[,i][danomedio[,i]>0.4 & danomedio[,i]<=0.6]<-6
-  danomedio[,i][danomedio[,i]>0.6 & danomedio[,i]<=0.8]<-8
-  danomedio[,i][danomedio[,i]>0.8 & danomedio[,i]<=1.0]<-10
+  pointsmedio[,i][danomedio[,i]<=0.2]<-2
+  pointsmedio[,i][danomedio[,i]>0.2 & danomedio[,i]<=0.4]<-4
+  pointsmedio[,i][danomedio[,i]>0.4 & danomedio[,i]<=0.6]<-6
+  pointsmedio[,i][danomedio[,i]>0.6 & danomedio[,i]<=0.8]<-8
+  pointsmedio[,i][danomedio[,i]>0.8 & danomedio[,i]<=1.0]<-10
 }
 
 for (i in 1:dim(danograve)[2])
 {
-  danograve[,i][danograve[,i]<=0.2]<-3
-  danograve[,i][danograve[,i]>0.2 & danograve[,i]<=0.4]<-6
-  danograve[,i][danograve[,i]>0.4 & danograve[,i]<=0.6]<-9
-  danograve[,i][danograve[,i]>0.6 & danograve[,i]<=0.8]<-12
-  danograve[,i][danograve[,i]>0.8 & danograve[,i]<=1.0]<-15
+  pointsgrave[,i][danograve[,i]<=0.2]<-3
+  pointsgrave[,i][danograve[,i]>0.2 & danograve[,i]<=0.4]<-6
+  pointsgrave[,i][danograve[,i]>0.4 & danograve[,i]<=0.6]<-9
+  pointsgrave[,i][danograve[,i]>0.6 & danograve[,i]<=0.8]<-12
+  pointsgrave[,i][danograve[,i]>0.8 & danograve[,i]<=1.0]<-15
 }
 
 fisurastotal<-rowSums(cbind(danograve[,c(1)],danomedio[,c(1:3,6)],danoleve[,c(1,5)]),na.rm=TRUE)
@@ -437,32 +440,36 @@ glasstotal<-as.data.frame(glasstotal)
 doortotal<-as.data.frame(doortotal)
 electtotal<-as.data.frame(electtotal)
 
-# pondano<-cbind(dano$todos_fiss_porc,dano$todos_leaks_porc,dano$todos_glass_porc,
-#                  dano$todos_door_porc,dano$todos_elect_porc)
-# 
-# pondanomedio<-c(1,4:5)
-# pondanograve<-c(2:3)
-# 
-# for (i in 1:length(pondanomedio))
-# {
-#   j<-pondanomedio[i]
-#   pondano[,j][pondano[,j]<=0.2]<-0.4
-#   pondano[,j][pondano[,j]>0.2 & pondano[,j]<=0.4]<-0.8
-#   pondano[,j][pondano[,j]>0.4 & pondano[,j]<=0.6]<-1.2
-#   pondano[,j][pondano[,j]>0.6 & pondano[,j]<=0.8]<-1.6
-#   pondano[,j][pondano[,j]>0.8 & pondano[,j]<=1.0]<-2.0
-# }
-# 
-# for (i in 1:length(pondanograve))
-# {
-#   j<-pondanograve[i]
-#   pondano[,j][pondano[,j]<=0.2]<-0.4
-#   pondano[,j][pondano[,j]>0.2 & pondano[,j]<=0.4]<-0.8
-#   pondano[,j][pondano[,j]>0.4 & pondano[,j]<=0.6]<-1.2
-#   pondano[,j][pondano[,j]>0.6 & pondano[,j]<=0.8]<-1.6
-#   pondano[,j][pondano[,j]>0.8 & pondano[,j]<=1.0]<-2.0
-# }
+pondano<-cbind(dano$todos_fiss_porc,dano$todos_leaks_porc,dano$todos_glass_porc,
+                 dano$todos_door_porc,dano$todos_elect_porc)
+colnames(pondano)<-c("todos_fiss_porc","todos_leaks_porc","todos_glass_porc",
+                     "todos_door_porc","todos_elect_porc")
+pondanopoints<-pondano
 
+pondanomedio<-c(1,4:5)
+pondanograve<-c(2:3)
+
+for (i in 1:length(pondanomedio))
+{
+  j<-pondanomedio[i]
+  pondanopoints[,j][pondano[,j]<=0.2]<-0.4
+  pondanopoints[,j][pondano[,j]>0.2 & pondano[,j]<=0.4]<-0.8
+  pondanopoints[,j][pondano[,j]>0.4 & pondano[,j]<=0.6]<-1.2
+  pondanopoints[,j][pondano[,j]>0.6 & pondano[,j]<=0.8]<-1.6
+  pondanopoints[,j][pondano[,j]>0.8 & pondano[,j]<=1.0]<-2.0
+}
+
+for (i in 1:length(pondanograve))
+{
+  j<-pondanograve[i]
+  pondanopoints[,j][pondano[,j]<=0.2]<-0.6
+  pondanopoints[,j][pondano[,j]>0.2 & pondano[,j]<=0.4]<-1.2
+  pondanopoints[,j][pondano[,j]>0.4 & pondano[,j]<=0.6]<-1.8
+  pondanopoints[,j][pondano[,j]>0.6 & pondano[,j]<=0.8]<-2.4
+  pondanopoints[,j][pondano[,j]>0.8 & pondano[,j]<=1.0]<-3.0
+}
+
+pondanopoints<-as.data.frame(pondanopoints)
 
 pondutil<-dano[,c(7:8)]
 pondutil$Utilizacion<-pondutil$N_Alum_inscr/pondutil$N_Alum_capac
@@ -474,6 +481,12 @@ pondutil$Ponderador[pondutil$Utilizacion>0.8 & pondutil$Utilizacion<=1.0]<-1.25
 pondutil$Ponderador[pondutil$Utilizacion>1.0]<-1.5
 pondutil$Ponderador[is.na(pondutil$Utilizacion)]<-1.0 #Si no hay informacion de N° alumnos, se asume utilizacion "normal"
 
+pointstotal<-pondutil$Ponderador*rowSums(cbind(pondanopoints$todos_fiss_porc*fisurastotal,
+                                               pondanopoints$todos_leaks_porc*leakstotal,
+                                         pondanopoints$todos_glass_porc*glasstotal,
+                                         pondanopoints$todos_door_porc*doortotal,
+                                         pondanopoints$todos_elect_porc*electtotal),na.rm=TRUE)
+pointstotal<-as.data.frame(pointstotal)
   
   #Priorizacion por escuela: "Qué queremos solucionar primero?" = (1) Daño restrictivo func, (2)Situc hist, (3) Daño no rest, (4) Equipamiento
     #Opciónes: Pjte y/o cualitativo 4-5 niveles urgencia infra (sin problema, urgente, mayor, moderado, leve)
